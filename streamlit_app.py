@@ -2,22 +2,20 @@ import os
 import requests
 import streamlit as st
 
-API_BASE = os.getenv("API_BASE", "http://127.0.0.1:8000")
+API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8000")
 
 st.set_page_config(page_title="Notes UI", page_icon="📝")
 st.title("📝 Notes (Streamlit)")
-st.caption(f"API: {API_BASE}")
+st.caption(f"API: {API_BASE_URL}")
 
-# ---- helpers ----
 def fetch_notes():
-    r = requests.get(f"{API_BASE}/notes", timeout=5)
+    r = requests.get(f"{API_BASE_URL}/notes", timeout=5)
     r.raise_for_status()
     data = r.json()
-    # 네 FastAPI가 {"items": [...]}로 준다고 했으니 그 기준
     return data.get("items", [])
 
 def create_note(content: str):
-    r = requests.post(f"{API_BASE}/notes", json={"content": content}, timeout=5)
+    r = requests.post(f"{API_BASE_URL}/notes", json={"content": content}, timeout=5)
     r.raise_for_status()
     return r.json()
 
