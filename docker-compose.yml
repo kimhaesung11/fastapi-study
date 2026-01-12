@@ -1,27 +1,51 @@
 services:
   db:
-    image: postgres:16v # 
+    image: postgres:16 # PostgreSQL 16 이미지
     container_name: my-postgres # 컨테이너 이름
     environment:
-      POSTGRES_USER: me # 사용자 이름
-      POSTGRES_PASSWORD: "1234" # 비밀번호
-      POSTGRES_DB: study # 데이터베이스 이름
+      POSTGRES_USER: me # DB 유저
+      POSTGRES_PASSWORD: "1234" # DB 비밀번호(개발용)
+      POSTGRES_DB: study # DB 이름
     ports:
-      - "5432:5432"
+      - "5432:5432" # 로컬:컨테이너
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data # DB 데이터 영속화
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U me -d study"] # DB 준비 체크
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   api:
-    build: .
-    container_name: fastapi-study
+    build: . # Dockerfile로 빌드
+    container_name: fastapi-study # 컨테이너 이름
     ports:
-      - "8000:8000"
+      - "8000:8000" # FastAPI 포트
     environment:
-      DATABASE_URL: "postgresql+psycopg://me:1234@db:5432/study"
+      DATABASE_URL: "postgresql+psycopg://me:1234@db:5432/study" # DB 접속 URL
     depends_on:
-      - db
+      db:
+        condition: service_healthy # DB 준비되면 api 시작
+    command: >
+      gunicorn main:app
+      -k uvicorn.workers.UvicornWorker
+      -b 0.0.0.0:8000
+      --workers 2
+      --timeout 60
 
-  
+  streamlit:
+    build: . # 같은 이미지 재사용(파이썬 deps 동일)
+    container_name: streamlit-study # 컨테이너 이름
+    ports:
+      - "8501:8501" # Streamlit 포트
+    environment:
+      API_BASE_URL: "http://api:8000" # 컨테이너 내부에서 api 호출 주소
+    depends_on:
+      - api # api가 먼저 떠야 streamlit이 정상 동작
+    command: >
+      streamlit run streamlit_app.py
+      --server.address 0.0.0.0
+      --server.port 8501
 
 volumes:
-  pgdata:
+  pgdata: # postgres 데이터 볼륨
