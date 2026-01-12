@@ -36,15 +36,14 @@ fastapi-study/
 ├── requirements.txt
 └── .gitignore
 
-
-## 🚀 Run (Docker Compose)
-```bash
+🚀 Run (Docker Compose)
 docker compose up --build
-| Service         | URL                                                      |
-| --------------- | -------------------------------------------------------- |
-| FastAPI Swagger | [http://localhost:8000/docs](http://localhost:8000/docs) |
-| Streamlit       | [http://localhost:8501](http://localhost:8501)           |
 
+🌐 URL
+Service	URL
+FastAPI Swagger	http://localhost:8000/docs
+
+Streamlit	http://localhost:8501
 🗄️ PostgreSQL (DBeaver)
 
 Host: localhost
@@ -70,6 +69,4 @@ DBeaver에서 저장 확인
 🧹 Reset (DB 포함 초기화)
 docker compose down -v
 docker compose up --build
-FastAPI: http://localhost:8000/docs
 
-Streamlit: http://localhost:8501
