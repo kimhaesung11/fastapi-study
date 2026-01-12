@@ -1,0 +1,27 @@
+services:
+  db:
+    image: postgres:16v # 
+    container_name: my-postgres # 컨테이너 이름
+    environment:
+      POSTGRES_USER: me # 사용자 이름
+      POSTGRES_PASSWORD: "1234" # 비밀번호
+      POSTGRES_DB: study # 데이터베이스 이름
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  api:
+    build: .
+    container_name: fastapi-study
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: "postgresql+psycopg://me:1234@db:5432/study"
+    depends_on:
+      - db
+
+  
+
+volumes:
+  pgdata:
