@@ -2,9 +2,14 @@
 
 개인 학습/테스트용으로 **FastAPI + PostgreSQL + Streamlit** 연동을 **Docker Compose**로 재현한 프로젝트입니다.  
 Streamlit에서 입력 → FastAPI API 호출 → PostgreSQL DB 저장 → DBeaver로 확인까지 가능한 구조입니다.
+
+---
+
 ## 🖼️ Demo
+
 ### Streamlit UI
 ![Streamlit UI](docs/images/streamlit.png)
+
 ### FastAPI Swagger
 ![FastAPI Swagger](docs/images/swagger.png)
 
@@ -21,6 +26,7 @@ Streamlit에서 입력 → FastAPI API 호출 → PostgreSQL DB 저장 → DBeav
 ---
 
 ## 📁 Project Structure
+
 ```text
 fastapi-study/
 ├── docker-compose.yml
@@ -30,7 +36,6 @@ fastapi-study/
 ├── requirements.txt
 └── .gitignore
 
----
 
 ## 🚀 Run (Docker Compose)
 ```bash
