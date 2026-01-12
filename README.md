@@ -16,6 +16,7 @@ Streamlit에서 입력 → FastAPI API 호출 → PostgreSQL DB 저장 → DBeav
 ---
 
 ## 📁 Project Structure
+```text
 fastapi-study/
 ├── docker-compose.yml
 ├── Dockerfile
